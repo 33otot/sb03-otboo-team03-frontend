@@ -184,6 +184,7 @@ export interface RecommendationDto {
   weatherId: string;
   userId: string;
   clothes: OotdDto[];
+  reason: string;
 }
 
 export interface NotificationDto {

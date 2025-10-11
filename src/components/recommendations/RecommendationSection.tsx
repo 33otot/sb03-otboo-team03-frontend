@@ -27,7 +27,7 @@ export default function RecommendationSection() {
       <div className="bg-white rounded-[20px] box-border content-stretch flex flex-col gap-[34px] px-[40px] items-start justify-start py-8 relative w-full h-full shadow-[0px_-2px_10px_0px_rgba(0,0,0,0.05)]">
         {hasClothes ? (
             <>
-              <RecommendationHeader/>
+              <RecommendationHeader reason={recommendations.reason}/>
               <RecommendationGrid/>
             </>
         ) : (

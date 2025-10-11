@@ -6,7 +6,11 @@ import AddFeedModal from './AddFeedModal';
 import FeedDetailModal from "@/components/feeds/FeedDetailModal.tsx";
 import type {FeedDto} from "@/lib/api";
 
-export default function RecommendationHeader() {
+interface Props {
+  reason: string;
+}
+
+export default function RecommendationHeader({ reason }: Props) {
   const {loading, fetch} = useRecommendationStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [createdFeed, setCreatedFeed] = useState<FeedDto | undefined>();
@@ -32,7 +36,7 @@ export default function RecommendationHeader() {
           </div>
         </div>
         <div className="font-semibold leading-none not-italic relative shrink-0 text-[#808089] text-[18px] text-nowrap tracking-[-0.45px]">
-          <p className="leading-normal whitespace-pre">오늘 날씨에 맞는 옷을 추천해드릴게요</p>
+          <p className="leading-normal whitespace-pre">{reason}</p>
         </div>
       </div>
 
