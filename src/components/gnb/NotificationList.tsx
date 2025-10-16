@@ -3,17 +3,6 @@ import { useNotificationStore } from '@/lib/stores/useNotificationStore.ts';
 import { readNotification } from '@/lib/api/notifications.ts';
 import { NotificationItem } from './NotificationItem.tsx';
 import { useInfiniteScroll } from '@/lib/hooks/useInfiniteScroll.ts';
-import {
-  AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger
-} from "@/components/ui/alert-dialog.tsx";
 import { Button } from '@/components/ui/button.tsx';
 import { toast } from 'sonner';
 
@@ -119,27 +108,13 @@ export const NotificationList = ({ isOpen, onClose, anchorElement }: Notificatio
       <div className="flex justify-between items-center p-4 border-b h-[50px]">
         <h1 className="font-semibold text-lg">알림</h1>
         {notifications.length > 0 && (
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="link" className="text-sm text-[var(--color-gray-400)] p-0 h-auto">
-                  모두 지우기
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>모든 알림을 삭제하시겠습니까?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    이 작업은 되돌릴 수 없으며, 모든 알림이 영구적으로 삭제됩니다.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogAction onClick={handleDeleteAll} className="bg-destructive hover:bg-destructive/90">
-                    지우기
-                  </AlertDialogAction>
-                  <AlertDialogCancel>취소</AlertDialogCancel>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            <Button
+              variant="link"
+              className="text-sm text-[var(--color-gray-400)] p-0 h-auto"
+              onClick={handleDeleteAll}
+            >
+              모두 지우기
+            </Button>
         )}
       </div>
 
