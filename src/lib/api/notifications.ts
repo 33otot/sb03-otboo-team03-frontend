@@ -22,6 +22,6 @@ export const readNotification = async (notificationId: string): Promise<void> =>
 /**
  * 알림 읽음 처리
  */
-export const deleteAllNotifications = () => {
+export const deleteAllByUserId = () => {
   return apiClient.delete('/api/notifications');
 }
