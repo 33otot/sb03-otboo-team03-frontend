@@ -3,6 +3,19 @@ import { useNotificationStore } from '@/lib/stores/useNotificationStore.ts';
 import { readNotification } from '@/lib/api/notifications.ts';
 import { NotificationItem } from './NotificationItem.tsx';
 import { useInfiniteScroll } from '@/lib/hooks/useInfiniteScroll.ts';
+import {
+  AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger
+} from "@/components/ui/alert-dialog.tsx";
+import { Button } from '@/components/ui/button.tsx';
+import { toast } from 'sonner';
 
 interface NotificationListProps {
   isOpen: boolean;
@@ -11,7 +24,13 @@ interface NotificationListProps {
 }
 
 export const NotificationList = ({ isOpen, onClose, anchorElement }: NotificationListProps) => {
-  const { data: notifications, loading, fetchMore, delete: removeNotification } = useNotificationStore();
+  const {
+    data: notifications,
+    loading,
+    fetchMore,
+    delete: removeNotification,
+    deleteAll
+  } = useNotificationStore();
   const listRef = useRef<HTMLDivElement>(null);
 
   const { ref: infiniteScrollRef } = useInfiniteScroll({
@@ -58,6 +77,17 @@ export const NotificationList = ({ isOpen, onClose, anchorElement }: Notificatio
     }
   };
 
+  // 새로 추가한 함수
+  const handleDeleteAll = async () => {
+    try {
+      await deleteAll();
+      toast.success('모든 알림이 삭제되었습니다.');
+      onClose(); // 삭제 후 창 닫기
+    } catch (error) {
+      console.error('Failed to delete all notifications', error);
+      toast.error('알림 삭제 중 오류가 발생했습니다.');
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -85,9 +115,37 @@ export const NotificationList = ({ isOpen, onClose, anchorElement }: Notificatio
       className="bg-white rounded-[20px] border border-[var(--color-gray-200)] shadow-[0px_2px_10px_0px_rgba(41,52,57,0.14)] overflow-hidden"
       style={getPopupStyle()}
     >
+      {/* 알림 헤더 */}
+      <div className="flex justify-between items-center p-4 border-b h-[50px]">
+        <h1 className="font-semibold text-lg">알림</h1>
+        {notifications.length > 0 && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="link" className="text-sm text-[var(--color-gray-400)] p-0 h-auto">
+                  모두 지우기
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>모든 알림을 삭제하시겠습니까?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    이 작업은 되돌릴 수 없으며, 모든 알림이 영구적으로 삭제됩니다.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogAction onClick={handleDeleteAll} className="bg-destructive hover:bg-destructive/90">
+                    지우기
+                  </AlertDialogAction>
+                  <AlertDialogCancel>취소</AlertDialogCancel>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+        )}
+      </div>
+
       {/* 알림 목록 */}
       <div 
-        className="flex flex-col gap-0.5 h-[500px] overflow-y-auto"
+        className="flex flex-col gap-0.5 h-[480px] overflow-y-auto"
       >
         {notifications.length === 0 ? (
           <div className="flex items-center justify-center h-full text-[var(--color-gray-400)]">
@@ -95,21 +153,10 @@ export const NotificationList = ({ isOpen, onClose, anchorElement }: Notificatio
           </div>
         ) : (
           <>
-            {notifications.map((notification, index) => {
-              const isFirst = index === 0;
-              const isLast = index === notifications.length - 1;
-              let roundedClass = '';
-              
-              if (isFirst && isLast) {
-                roundedClass = 'rounded-tl-[24px] rounded-tr-[24px] rounded-bl-[24px] rounded-br-[24px]';
-              } else if (isFirst) {
-                roundedClass = 'rounded-tl-[24px] rounded-tr-[24px]';
-              } else if (isLast) {
-                roundedClass = 'rounded-bl-[24px] rounded-br-[24px]';
-              }
+            {notifications.map((notification) => {
 
               return (
-                <div key={notification.id} className={roundedClass}>
+                <div key={notification.id}>
                   <NotificationItem
                     notification={notification}
                     onClick={handleNotificationClick}
