@@ -56,6 +56,7 @@ export interface ProfileDto {
   location?: WeatherAPILocation;
   temperatureSensitivity?: number;
   profileImageUrl?: string;
+  weatherNotificationEnabled?: boolean;
 }
 
 export interface WeatherAPILocation {
@@ -252,6 +253,10 @@ export interface ProfileUpdateRequest {
   birthDate?: string;
   location?: WeatherAPILocation;
   temperatureSensitivity?: number;
+}
+
+export interface NotificationSettingUpdateRequest {
+  weatherNotificationEnabled?: boolean;
 }
 
 export interface FeedCreateRequest {

@@ -8,7 +8,8 @@ import type {
   ProfileUpdateRequest,
   ChangePasswordRequest,
   UserRoleUpdateRequest,
-  UserLockUpdateRequest
+  UserLockUpdateRequest,
+  NotificationSettingUpdateRequest,
 } from './types';
 
 /**
@@ -78,4 +79,13 @@ export const updateUserLock = async (
   request: UserLockUpdateRequest
 ): Promise<UserDto> => {
   return apiClient.patch<UserDto>(`/api/users/${userId}/lock`, request);
+};
+
+/**
+ * 날씨 알림 설정 업데이트
+ * */
+export const updateNotificationSetting = async (
+    request: NotificationSettingUpdateRequest
+): Promise<void> => {
+  return apiClient.patch<void>('/api/users/profiles/notification-weathers', request);
 };
