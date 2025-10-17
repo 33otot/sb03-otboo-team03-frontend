@@ -211,7 +211,7 @@ export default function FeedDetailRightSection({ feed, onDelete }: FeedDetailRig
               </button>
               <button
                 onClick={handleEdit}
-                className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors disabled:opacity-50"
+                className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-400 transition-colors disabled:opacity-50"
                 disabled={loading || content.trim() === ''}
               >
                 {loading ? '저장 중...' : '저장'}
