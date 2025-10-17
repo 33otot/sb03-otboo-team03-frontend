@@ -105,7 +105,7 @@
   --color-gray-200: #E7E7E9;
   --color-gray-100: #F7F7F8;
   --color-gray-50: #FAFAFA;
-  --color-blue-500: #1E89F4;
+  --color-blue-500: #000080;
   --color-blue-300: #99D4FF;
   --color-blue-200: #E0F2FF;
   --color-blue-100: #F0F9FF;
@@ -162,3 +162,10 @@
     font-family: 'SUIT', sans-serif;
   }
 }
+
+:root {
+  --font-headline: "Black Han Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+  --font-body: "Noto Sans KR", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+body { font-family: var(--font-body); }
+.font-headline { font-family: var(--font-headline); }
