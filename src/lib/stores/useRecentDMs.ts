@@ -13,17 +13,39 @@ type S = {
 const KEY = 'recentDMs:v1';
 
 export const useRecentDMs = create<S>((set, get) => ({
-  items: JSON.parse(localStorage.getItem(KEY) || '[]'),
+  items: (() => {
+    try {
+      const stored = localStorage.getItem(KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  })(),
   push: (p) => {
     const rest = get().items.filter(i => i.id !== p.id);
     const next = [p, ...rest].slice(0, 50);
-    localStorage.setItem(KEY, JSON.stringify(next));
+    try {
+      localStorage.setItem(KEY, JSON.stringify(next));
+    } catch (error) {
+      console.warn('Failed to save recent DMs:', error);
+    }
     set({ items: next });
   },
   remove: (id) => {
     const next = get().items.filter(i => i.id !== id);
-    localStorage.setItem(KEY, JSON.stringify(next));
+    try {
+      localStorage.setItem(KEY, JSON.stringify(next));
+    } catch (error) {
+      console.warn('Failed to save recent DMs:', error);
+    }
     set({ items: next });
   },
-  clear: () => { localStorage.removeItem(KEY); set({ items: [] }); }
+  clear: () => { 
+    try {
+      localStorage.removeItem(KEY);
+    } catch (error) {
+      console.warn('Failed to clear recent DMs:', error);
+    }
+    set({ items: [] });
+  }
 }));

@@ -14,7 +14,8 @@ export function ChatRoomList() {
   }
 
   if (error) {
-    return <div className="p-6 text-center text-red-500">오류가 발생했습니다: {error.message}</div>;
+    const msg = error instanceof Error ? error.message : String(error);
+    return <div className="p-6 text-center text-red-500">오류가 발생했습니다: {msg}</div>;
   }
 
   if (chatRooms.length === 0) {
