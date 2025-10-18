@@ -1,22 +1,73 @@
-import {create} from 'zustand';
-import type {DirectMessageDto, DirectMessageParams} from '@/lib/api/types';
-import {getDms} from '@/lib/api/messages';
-import {type PaginatedStore} from './types';
-import {createPaginatedStoreActions} from "@/lib/stores/actions.ts";
+import { create } from 'zustand';
+import { getDirectMessages, type DirectMessageDto, type DirectMessageListParams } from '@/lib/api/messages';
 
-interface DirectMessageStore extends PaginatedStore<DirectMessageDto, DirectMessageParams> {}
+interface DirectMessageStoreState {
+  messages: DirectMessageDto[];
+  params: DirectMessageListParams;
+  loading: boolean;
+  error: Error | null;
+  hasNext: boolean;
+  fetchMessages: (initialFetch?: boolean) => Promise<void>;
+  fetchMore: () => Promise<void>;
+  add: (message: DirectMessageDto) => void;
+  updateParams: (newParams: Partial<DirectMessageListParams>) => void;
+  clearData: () => void;
+}
 
-export const useDirectMessageStore = create<DirectMessageStore>((set, get) => ({
-  ...createPaginatedStoreActions({
-    set, get,
-    fetchApi: getDms,
-    initialData: {
-      params: {
-        cursor: undefined,
-        idAfter: undefined,
-        limit: 20,
-        userId: '',
-      }
+export const useDirectMessageStore = create<DirectMessageStoreState>((set, get) => ({
+  messages: [],
+  params: { userId: '', limit: 20 },
+  loading: false,
+  error: null,
+  hasNext: true,
+
+  fetchMessages: async (initialFetch = true) => {
+    const { params, loading, hasNext } = get();
+    if (loading || (!hasNext && !initialFetch)) return;
+
+    set({ loading: true, error: null });
+    try {
+      const response = await getDirectMessages(params);
+      set((state) => ({
+        messages: initialFetch ? response.data : [...state.messages, ...response.data],
+        hasNext: response.hasNext,
+        params: { ...state.params, cursor: response.nextCursor, idAfter: response.nextIdAfter },
+        loading: false,
+      }));
+    } catch (error) {
+      const err = error as Error;
+      set({ error: err, loading: false });
+      console.error("Failed to fetch direct messages:", err);
     }
-  }),
+  },
+
+  fetchMore: () => {
+    return get().fetchMessages(false);
+  },
+
+  add: (message: DirectMessageDto) => {
+    set((state) => ({
+      messages: [...state.messages, message],
+    }));
+  },
+
+  updateParams: (newParams: Partial<DirectMessageListParams>) => {
+    set((state) => ({
+      params: { ...state.params, ...newParams },
+      messages: [], // 파라미터 변경 시 데이터 초기화
+      hasNext: true,
+      error: null,
+    }));
+    get().fetchMessages(); // 파라미터 변경 후 다시 불러오기
+  },
+
+  clearData: () => {
+    set({
+      messages: [],
+      params: { userId: '', limit: 20 },
+      loading: false,
+      error: null,
+      hasNext: true,
+    });
+  },
 }));
