@@ -25,20 +25,15 @@ export const useDirectMessageStore = create<DirectMessageStoreState>((set, get) 
     const { params, loading, hasNext } = get();
     if (loading || (!hasNext && !initialFetch)) return;
 
-    const userIdAtRequest = params.userId;
     set({ loading: true, error: null });
     try {
       const response = await getDirectMessages(params);
-      set((state) => {
-        if (state.params.userId !== userIdAtRequest) return state; // stale 응답 무시
-        const next = initialFetch ? response.data : [...state.messages, ...response.data];
-        return {
-          messages: next,
-          hasNext: response.hasNext,
-          params: { ...state.params, cursor: response.nextCursor, idAfter: response.nextIdAfter },
-          loading: false,
-        }
-      });
+      set((state) => ({
+        messages: initialFetch ? response.data : [...state.messages, ...response.data],
+        hasNext: response.hasNext,
+        params: { ...state.params, cursor: response.nextCursor, idAfter: response.nextIdAfter },
+        loading: false,
+      }));
     } catch (error) {
       const err = error as Error;
       set({ error: err, loading: false });
@@ -51,10 +46,9 @@ export const useDirectMessageStore = create<DirectMessageStoreState>((set, get) 
   },
 
   add: (message: DirectMessageDto) => {
-    set((state) => {
-      if (state.messages.some(m => m.id === message.id)) return state;
-      return { messages: [...state.messages, message] };
-    });
+    set((state) => ({
+      messages: [...state.messages, message],
+    }));
   },
 
   updateParams: (newParams: Partial<DirectMessageListParams>) => {
