@@ -21,6 +21,6 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   if (!isAuthenticated()) {
     return null; // or a loading spinner, or redirect to login
-  // }
+  }
   return <>{children}</>;
 }
