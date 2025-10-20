@@ -200,8 +200,8 @@ export interface NotificationDto {
 export interface DirectMessageDto {
   id: string;
   createdAt: string;
-  sender: UserSummary;
-  receiver: UserSummary;
+  sender: AuthorDto;
+  receiver: AuthorDto;
   content: string;
 }
 

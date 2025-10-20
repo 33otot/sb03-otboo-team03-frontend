@@ -106,10 +106,19 @@ export default function LoginForm() {
     isValidEmail(formData.username) && isValidPassword(formData.password);
 
   return (
-    <div className="flex flex-col gap-[30px] w-full">
-      <h1 className="text-[var(--color-gray-700)] text-[var(--font-size-header-1)] font-[var(--font-weight-extrabold)] tracking-[-0.6px] text-center">
-        날씨에 맞는 옷을 추천해드릴게요
-      </h1>
+    <div className="flex flex-col gap-1 md:gap-1 w-full mt-0 mb-2">
+    
+          {/* 타이틀 */}
+          <div className="text-center -translate-y-3 md:-translate-y-5 space-y-2">
+  <h1 className="font-headline text-[44px] md:text-[56px] leading-none tracking-[-0.02em] text-[#2a167b] inline-block relative">
+    옷장을 부탁해
+    <span className="absolute left-0 right-0 -bottom-1 h-1.5 rounded-full bg-[#e9e4ff]" />
+  </h1>
+
+  <p className="mt-2 text-[14px] md:text-[15px] font-semibold text-gray-700">
+  오늘 날씨에 맞춰 <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-sky-400">옷</span>을 골라드려요
+</p>
+</div>
       
       <form onSubmit={handleSubmit} className="flex flex-col gap-[26px] w-full">
         <div className="flex flex-col gap-[18px] w-full">

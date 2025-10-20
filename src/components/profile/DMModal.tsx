@@ -7,6 +7,7 @@ import {useWebSocketStore} from "@/lib/stores/websocketStore.ts";
 import {useAuthStore} from "@/lib/stores/useAuthStore.ts";
 import {useDirectMessageStore} from "@/lib/stores/useDirectMessageStore.ts";
 import {useInfiniteScroll} from "@/lib/hooks/useInfiniteScroll.ts";
+import type { DirectMessageDto } from '@/lib/api/messages';
 
 interface DMModalProps {
   open: boolean;
@@ -21,7 +22,7 @@ interface DMModalProps {
 export default function DMModal({ open, onOpenChange, targetUser }: DMModalProps) {
   const { send, isConnected, subscribe } = useWebSocketStore();
   const { data: auth } = useAuthStore();
-  const { data: messages, add, updateParams, clearData: clearMessages, fetchMore, loading } = useDirectMessageStore();
+  const { messages, add, updateParams, clearData: clearMessages, fetchMore, loading } = useDirectMessageStore();
 
   const [content, setContent] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -195,7 +196,7 @@ export default function DMModal({ open, onOpenChange, targetUser }: DMModalProps
 
                   {/* 메시지 목록 - 최신 메시지가 아래로 */}
                   <div className="flex flex-col gap-[18px]">
-                    {messages.slice().sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()).map((msg) => (
+                    {messages.slice().sort((a: DirectMessageDto, b: DirectMessageDto) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()).map((msg: DirectMessageDto) => (
                       <div key={msg.id}>
                         {msg.sender.userId === auth?.userDto.id ? (
                           /* 내가 보낸 메시지 */
@@ -205,7 +206,7 @@ export default function DMModal({ open, onOpenChange, targetUser }: DMModalProps
                                 <p className="leading-[normal] whitespace-pre">{formatTimeAgo(msg.createdAt)}</p>
                               </div>
                             </div>
-                            <div className="bg-[#1e89f4] px-[19px] py-3.5 rounded-[16px]">
+                            <div className="bg-blue-500 px-[19px] py-3.5 rounded-[16px]">
                               <div className="font-['SUIT:SemiBold',_sans-serif] text-white text-[18px] tracking-[-0.45px] leading-[0] not-italic">
                                 <p className="leading-[normal] whitespace-pre">{msg.content}</p>
                               </div>

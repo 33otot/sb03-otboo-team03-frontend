@@ -111,5 +111,5 @@ export {
 
 export {
   // Messages
-  getDms,
+  getDirectMessages,
 } from './messages';

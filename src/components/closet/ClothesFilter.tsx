@@ -62,7 +62,7 @@ export default function ClothesFilter({ onAddClick }: ClothesFilterProps) {
         <div className="relative shrink-0">
           <button
             onClick={onAddClick}
-            className="bg-blue-500 hover:bg-blue-600 box-border content-stretch flex gap-1.5 h-[46px] items-center justify-center px-[18px] py-2.5 relative rounded-[12px] shrink-0 transition-colors"
+            className="bg-blue-500 hover:bg-blue-400 box-border content-stretch flex gap-1.5 h-[46px] items-center justify-center px-[18px] py-2.5 relative rounded-[12px] shrink-0 transition-colors"
           >
             <div className="font-bold leading-none not-italic relative shrink-0 text-white text-[18px] text-nowrap tracking-[-0.45px]">
               <p className="leading-normal whitespace-pre">옷 추가하기</p>

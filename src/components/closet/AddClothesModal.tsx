@@ -177,7 +177,7 @@ export default function AddClothesModal({ open, onClose }: AddClothesModalProps)
               </div>
               <button 
                 onClick={() => fileInputRef.current?.click()}
-                className="bg-blue-500 hover:bg-blue-600 box-border content-stretch flex flex-col gap-2 items-center justify-center mb-[-26px] overflow-clip px-3 py-1.5 relative rounded-[100px] shrink-0 transition-colors"
+                className="bg-blue-500 hover:bg-blue-400 box-border content-stretch flex flex-col gap-2 items-center justify-center mb-[-26px] overflow-clip px-3 py-1.5 relative rounded-[100px] shrink-0 transition-colors"
               >
                 <div className="flex flex-col font-bold justify-center leading-none not-italic relative shrink-0 text-[16px] text-white tracking-[-0.4px] w-full">
                   <p className="leading-normal">변경</p>
@@ -279,7 +279,7 @@ export default function AddClothesModal({ open, onClose }: AddClothesModalProps)
                   <button
                     type="submit"
                     disabled={loading || !formData.name || !formData.type}
-                    className="bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed box-border content-stretch flex gap-1.5 h-[46px] items-center justify-center px-[18px] py-2.5 relative rounded-[12px] shrink-0 transition-colors"
+                    className="bg-blue-500 hover:bg-blue-400 disabled:opacity-50 disabled:cursor-not-allowed box-border content-stretch flex gap-1.5 h-[46px] items-center justify-center px-[18px] py-2.5 relative rounded-[12px] shrink-0 transition-colors"
                   >
                     <span className="font-bold text-white text-[18px]">
                       {loading ? '저장 중...' : '저장'}
@@ -341,7 +341,7 @@ export default function AddClothesModal({ open, onClose }: AddClothesModalProps)
                 <button
                   type="submit"
                   disabled={loading || !url.trim()}
-                  className="bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed box-border content-stretch flex gap-1.5 h-[46px] items-center justify-center px-[18px] py-2.5 relative rounded-[12px] shrink-0 transition-colors"
+                  className="bg-blue-500 hover:bg-blue-400 disabled:opacity-50 disabled:cursor-not-allowed box-border content-stretch flex gap-1.5 h-[46px] items-center justify-center px-[18px] py-2.5 relative rounded-[12px] shrink-0 transition-colors"
                 >
                   <span className="font-bold text-white text-[18px]">
                     {loading ? '불러오는 중...' : '불러오기'}
