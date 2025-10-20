@@ -214,7 +214,7 @@ export default function UserList() {
                             (toggleLoading?.userId === user.id && toggleLoading?.type === 'role') ||
                             authData?.userDto?.id === user.id
                           }
-                          className="w-[50px] h-[25px] data-[state=checked]:bg-[blue-500] data-[state=unchecked]:bg-[#d4d4d9]"
+                          className="w-[50px] h-[25px] data-[state=checked]:bg-blue-500 data-[state=unchecked]:bg-[#d4d4d9]"
                           style={{
                             '--thumb-size': '18px',
                             '--thumb-translate-checked': '28px',
