@@ -23,16 +23,6 @@ export const NotificationList = ({ isOpen, onClose, anchorElement }: Notificatio
   const listRef = useRef<HTMLDivElement>(null); // popup 전체 (외부 클릭용)
   const scrollContainerRef = useRef<HTMLDivElement>(null); // 내부 스크롤 컨테이너
 
-  // 호출 중복 방지 플래그 (fetchMore가 비동기인 동안 중복 호출 방지)
-  const isFetchingRef = useRef(false);
-
-  useEffect(() => {
-    // fetch가 끝나면 중복 호출 플래그 초기화
-    if (!loading) {
-      isFetchingRef.current = false;
-    }
-  }, [loading]);
-
   // 스크롤 핸들러: 스크롤 컨테이너가 바닥에 가까워지면 불러오기
   const handleScroll = useCallback(
     (e: React.UIEvent<HTMLDivElement>) => {
@@ -41,8 +31,7 @@ export const NotificationList = ({ isOpen, onClose, anchorElement }: Notificatio
       const distanceToBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
 
       if (distanceToBottom <= thresholdPx) {
-        if (loading || isFetchingRef.current) return;
-        isFetchingRef.current = true;
+        if (loading) return; // 로딩 중이면 중복 호출 방지
         fetchMore();
       }
     },
@@ -82,10 +71,13 @@ export const NotificationList = ({ isOpen, onClose, anchorElement }: Notificatio
   // 알림 클릭 핸들러
   const handleNotificationClick = async (notificationId: string) => {
     try {
+      // API 호출이 성공했을 때만 클라이언트 상태 변경
       await readNotification(notificationId);
       removeNotification(notificationId);
+      toast.info('알림을 읽음 처리했습니다.');
     } catch (error) {
       console.error('알림 읽음 처리 실패:', error);
+      toast.error('알림 읽음 처리에 실패했습니다.');
     }
   };
 
