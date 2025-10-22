@@ -1,8 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { useNotificationStore } from '@/lib/stores/useNotificationStore.ts';
 import { readNotification } from '@/lib/api/notifications.ts';
 import { NotificationItem } from './NotificationItem.tsx';
-import { useInfiniteScroll } from '@/lib/hooks/useInfiniteScroll.ts';
 import { Button } from '@/components/ui/button.tsx';
 import { toast } from 'sonner';
 
@@ -20,11 +19,35 @@ export const NotificationList = ({ isOpen, onClose, anchorElement }: Notificatio
     delete: removeNotification,
     deleteAll
   } = useNotificationStore();
-  const listRef = useRef<HTMLDivElement>(null);
 
-  const { ref: infiniteScrollRef } = useInfiniteScroll({
-    onLoadMore: () => fetchMore(),
-  });
+  const listRef = useRef<HTMLDivElement>(null); // popup 전체 (외부 클릭용)
+  const scrollContainerRef = useRef<HTMLDivElement>(null); // 내부 스크롤 컨테이너
+
+  // 호출 중복 방지 플래그 (fetchMore가 비동기인 동안 중복 호출 방지)
+  const isFetchingRef = useRef(false);
+
+  useEffect(() => {
+    // fetch가 끝나면 중복 호출 플래그 초기화
+    if (!loading) {
+      isFetchingRef.current = false;
+    }
+  }, [loading]);
+
+  // 스크롤 핸들러: 스크롤 컨테이너가 바닥에 가까워지면 불러오기
+  const handleScroll = useCallback(
+    (e: React.UIEvent<HTMLDivElement>) => {
+      const el = e.currentTarget;
+      const thresholdPx = 150; // 바닥으로부터 얼마나 남았을 때 불러올지 (픽셀)
+      const distanceToBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+
+      if (distanceToBottom <= thresholdPx) {
+        if (loading || isFetchingRef.current) return;
+        isFetchingRef.current = true;
+        fetchMore();
+      }
+    },
+    [fetchMore, loading]
+  );
 
   // 외부 클릭 감지
   useEffect(() => {
@@ -118,8 +141,10 @@ export const NotificationList = ({ isOpen, onClose, anchorElement }: Notificatio
         )}
       </div>
 
-      {/* 알림 목록 */}
+      {/* 알림 목록 (스크롤 컨테이너에 onScroll 연결) */}
       <div 
+        ref={scrollContainerRef}
+        onScroll={handleScroll}
         className="flex flex-col gap-0.5 h-[480px] overflow-y-auto"
       >
         {notifications.length === 0 ? (
@@ -129,7 +154,6 @@ export const NotificationList = ({ isOpen, onClose, anchorElement }: Notificatio
         ) : (
           <>
             {notifications.map((notification) => {
-
               return (
                 <div key={notification.id}>
                   <NotificationItem
@@ -140,8 +164,6 @@ export const NotificationList = ({ isOpen, onClose, anchorElement }: Notificatio
               );
             })}
 
-            <div ref={infiniteScrollRef} className="h-1" />
-            
             {loading && notifications.length > 0 && (
               <div className="p-4 text-center text-[var(--color-gray-400)] text-sm">
                 더 불러오는 중...
