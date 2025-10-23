@@ -1,8 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { useNotificationStore } from '@/lib/stores/useNotificationStore.ts';
 import { readNotification } from '@/lib/api/notifications.ts';
 import { NotificationItem } from './NotificationItem.tsx';
-import { useInfiniteScroll } from '@/lib/hooks/useInfiniteScroll.ts';
 import { Button } from '@/components/ui/button.tsx';
 import { toast } from 'sonner';
 
@@ -20,11 +19,24 @@ export const NotificationList = ({ isOpen, onClose, anchorElement }: Notificatio
     delete: removeNotification,
     deleteAll
   } = useNotificationStore();
-  const listRef = useRef<HTMLDivElement>(null);
 
-  const { ref: infiniteScrollRef } = useInfiniteScroll({
-    onLoadMore: () => fetchMore(),
-  });
+  const listRef = useRef<HTMLDivElement>(null); // popup 전체 (외부 클릭용)
+  const scrollContainerRef = useRef<HTMLDivElement>(null); // 내부 스크롤 컨테이너
+
+  // 스크롤 핸들러: 스크롤 컨테이너가 바닥에 가까워지면 불러오기
+  const handleScroll = useCallback(
+    (e: React.UIEvent<HTMLDivElement>) => {
+      const el = e.currentTarget;
+      const thresholdPx = 150; // 바닥으로부터 얼마나 남았을 때 불러올지 (픽셀)
+      const distanceToBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+
+      if (distanceToBottom <= thresholdPx) {
+        if (loading) return; // 로딩 중이면 중복 호출 방지
+        fetchMore();
+      }
+    },
+    [fetchMore, loading]
+  );
 
   // 외부 클릭 감지
   useEffect(() => {
@@ -59,10 +71,13 @@ export const NotificationList = ({ isOpen, onClose, anchorElement }: Notificatio
   // 알림 클릭 핸들러
   const handleNotificationClick = async (notificationId: string) => {
     try {
+      // API 호출이 성공했을 때만 클라이언트 상태 변경
       await readNotification(notificationId);
       removeNotification(notificationId);
+      toast.info('알림을 읽음 처리했습니다.');
     } catch (error) {
       console.error('알림 읽음 처리 실패:', error);
+      toast.error('알림 읽음 처리에 실패했습니다.');
     }
   };
 
@@ -118,8 +133,10 @@ export const NotificationList = ({ isOpen, onClose, anchorElement }: Notificatio
         )}
       </div>
 
-      {/* 알림 목록 */}
+      {/* 알림 목록 (스크롤 컨테이너에 onScroll 연결) */}
       <div 
+        ref={scrollContainerRef}
+        onScroll={handleScroll}
         className="flex flex-col gap-0.5 h-[480px] overflow-y-auto"
       >
         {notifications.length === 0 ? (
@@ -129,7 +146,6 @@ export const NotificationList = ({ isOpen, onClose, anchorElement }: Notificatio
         ) : (
           <>
             {notifications.map((notification) => {
-
               return (
                 <div key={notification.id}>
                   <NotificationItem
@@ -140,8 +156,6 @@ export const NotificationList = ({ isOpen, onClose, anchorElement }: Notificatio
               );
             })}
 
-            <div ref={infiniteScrollRef} className="h-1" />
-            
             {loading && notifications.length > 0 && (
               <div className="p-4 text-center text-[var(--color-gray-400)] text-sm">
                 더 불러오는 중...
