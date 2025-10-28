@@ -4,7 +4,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
 import { useFeedStore } from '@/lib/stores/useFeedStore';
-import { updateFeed, deleteFeed } from '@/lib/api/feeds';
+import {updateFeed, deleteFeed, deleteHardFeed} from '@/lib/api/feeds';
 import type { FeedDto } from '@/lib/api/types';
 import FeedComments from './FeedComments';
 import profileIcon from '@/assets/icons/profile.svg';
@@ -37,8 +37,10 @@ export default function FeedDetailRightSection({ feed, onDelete }: FeedDetailRig
   const [isEditing, setIsEditing] = useState(false);
   const [content, setContent] = useState(feed.content);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+  const [isHardDeleteAlertOpen, setIsHardDeleteAlertOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const isOwner = currentUser?.userDto?.id === feed.author.userId;
+  const isAdmin = currentUser?.userDto?.role === 'ADMIN';
 
   const handleEdit = async () => {
     if (!isEditing) {
@@ -72,6 +74,10 @@ export default function FeedDetailRightSection({ feed, onDelete }: FeedDetailRig
     setIsDeleteAlertOpen(true);
   };
 
+  const handleHardDeleteClick = () => {
+    setIsHardDeleteAlertOpen(true);
+  };
+
   const confirmDeleteFeed = async () => {
     try {
       setDeleteLoading(true);
@@ -90,6 +96,26 @@ export default function FeedDetailRightSection({ feed, onDelete }: FeedDetailRig
       }
     }
   };
+
+  const confirmHardDeleteFeed = async () => {
+    try {
+      setDeleteLoading(true);
+      await deleteHardFeed(feed.id);
+      deleteFeedFromStore(feed.id);
+      setIsHardDeleteAlertOpen(false);
+      toast.success('피드가 영구 삭제되었습니다.');
+      // 피드 상세 페이지에서 목록으로 돌아가는 로직 필요
+    } catch (error) {
+      console.error('피드 영구 삭제 실패:', error);
+      toast.error('피드 영구 삭제에 실패했습니다.');
+    } finally {
+      setDeleteLoading(false);
+      if (onDelete) {
+        onDelete();
+      }
+    }
+  };
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const month = date.getMonth() + 1;
@@ -153,7 +179,7 @@ export default function FeedDetailRightSection({ feed, onDelete }: FeedDetailRig
             </div>
             
             {/* 미트볼 메뉴 - 내 피드인 경우에만 표시 */}
-            {isOwner && (
+            {(isOwner || isAdmin) && (
               <div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -162,26 +188,42 @@ export default function FeedDetailRightSection({ feed, onDelete }: FeedDetailRig
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-32">
-                    <DropdownMenuItem
-                      className="cursor-pointer"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleEdit();
-                      }}
-                    >
-                      <Edit className="size-4 mr-2" />
-                      수정
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="cursor-pointer text-red-600 focus:text-red-600"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteClick();
-                      }}
-                    >
-                      <Trash2 className="size-4 mr-2" />
-                      삭제
-                    </DropdownMenuItem>
+                    {isOwner && (
+                      <DropdownMenuItem
+                        className="cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEdit();
+                        }}
+                      >
+                        <Edit className="size-4 mr-2" />
+                        수정
+                      </DropdownMenuItem>
+                    )}
+                    {isOwner && (
+                      <DropdownMenuItem
+                        className="cursor-pointer text-red-600 focus:text-red-600"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteClick();
+                        }}
+                      >
+                        <Trash2 className="size-4 mr-2" />
+                        삭제
+                      </DropdownMenuItem>
+                    )}
+                    {isAdmin && (
+                      <DropdownMenuItem
+                        className="cursor-pointer text-red-600 focus:text-red-600"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleHardDeleteClick();
+                        }}
+                      >
+                        <Trash2 className="size-4 mr-2" />
+                        영구 삭제
+                      </DropdownMenuItem>
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
@@ -236,7 +278,7 @@ export default function FeedDetailRightSection({ feed, onDelete }: FeedDetailRig
           <AlertDialogHeader>
             <AlertDialogTitle>피드를 삭제하시겠습니까?</AlertDialogTitle>
             <AlertDialogDescription>
-              이 작업은 되돌릴 수 없습니다. 피드와 관련된 모든 댓글이 영구적으로 삭제됩니다.
+              이 피드는 더 이상 다른 사용자에게 표시되지 않으며, 7일 후 자동으로 영구 삭제됩니다.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -246,6 +288,27 @@ export default function FeedDetailRightSection({ feed, onDelete }: FeedDetailRig
               disabled={deleteLoading}
             >
               {deleteLoading ? '삭제 중...' : '삭제'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* 영구 삭제 확인 다이얼로그 */}
+      <AlertDialog open={isHardDeleteAlertOpen} onOpenChange={setIsHardDeleteAlertOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>피드를 영구 삭제하시겠습니까?</AlertDialogTitle>
+            <AlertDialogDescription>
+              이 작업은 되돌릴 수 없습니다. 피드와 관련된 모든 데이터가 영구적으로 삭제됩니다.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>취소</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmHardDeleteFeed}
+              disabled={deleteLoading}
+            >
+              {deleteLoading ? '삭제 중...' : '영구 삭제'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
