@@ -5,12 +5,14 @@ import ProfileSummary from '@/components/profile/ProfileSummary';
 import UserFeedList from '@/components/profile/UserFeedList';
 import UserCloset from '@/components/profile/UserCloset';
 import ClosetToggleButton from '@/components/profile/ClosetToggleButton';
+import DeletedFeedList from '@/components/profile/DeletedFeedList';
 
 export default function ProfilePage() {
   const [searchParams] = useSearchParams();
   const userId = searchParams.get('userId');
   const currentUser = useAuthStore((state) => state.data);
   const [isClosetOpen, setIsClosetOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('feed'); // 'feed' or 'trash'
   
   // 실제로 표시할 사용자 ID (본인 프로필이면 현재 사용자 ID 사용)
   const targetUserId = userId || currentUser?.userDto?.id;
@@ -44,10 +46,35 @@ export default function ProfilePage() {
               </div>
             </div>
             
-            {/* 사용자 피드 목록 - 스크롤 가능 */}
+            {/* 탭 네비게이션 */}
+            <div className="flex border-b border-gray-200">
+              <button
+                className={`py-2 px-4 text-sm font-medium ${
+                  activeTab === 'feed'
+                    ? 'border-b-2 border-blue-500 text-blue-600'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+                onClick={() => setActiveTab('feed')}
+              >
+                피드
+              </button>
+              <button
+                className={`py-2 px-4 text-sm font-medium ${
+                  activeTab === 'trash'
+                    ? 'border-b-2 border-blue-500 text-blue-600'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+                onClick={() => setActiveTab('trash')}
+              >
+                휴지통
+              </button>
+            </div>
+            
+            {/* 사용자 피드 목록 또는 휴지통 목록 - 스크롤 가능 */}
             <div className="bg-white overflow-hidden rounded-lg shadow-sm flex-1 min-h-0">
               <div className="p-6 h-full">
-                <UserFeedList userId={targetUserId} />
+                {activeTab === 'feed' && <UserFeedList userId={targetUserId} />}
+                {activeTab === 'trash' && <DeletedFeedList userId={targetUserId} />}
               </div>
             </div>
           </div>

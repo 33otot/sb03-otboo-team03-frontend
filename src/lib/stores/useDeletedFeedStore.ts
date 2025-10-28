@@ -1,23 +1,21 @@
 import {create} from 'zustand';
-import type {FeedDto, FeedListParams} from '@/lib/api/types';
-import {getFeedList} from '@/lib/api/feeds';
+import type {FeedDto, CursorParams} from '@/lib/api/types';
+import {getDeletedFeedList} from '@/lib/api/feeds';
 import {type PaginatedStore} from './types';
 import {createPaginatedStoreActions} from "@/lib/stores/actions.ts";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface FeedStore extends PaginatedStore<FeedDto, FeedListParams> {}
+interface DeletedFeedStore extends PaginatedStore<FeedDto, CursorParams> {}
 
-export const useFeedStore = create<FeedStore>((set, get) => ({
+export const useDeletedFeedStore = create<DeletedFeedStore>((set, get) => ({
   ...createPaginatedStoreActions({
     set, get,
-    fetchApi: getFeedList,
+    fetchApi: getDeletedFeedList,
     initialData: {
       params: {
         cursor: undefined,
         idAfter: undefined,
         limit: 10,
-        sortBy: 'createdAt',
-        sortDirection: 'DESCENDING',
       }
     }
   }),
