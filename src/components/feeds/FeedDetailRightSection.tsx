@@ -278,7 +278,7 @@ export default function FeedDetailRightSection({ feed, onDelete }: FeedDetailRig
           <AlertDialogHeader>
             <AlertDialogTitle>피드를 삭제하시겠습니까?</AlertDialogTitle>
             <AlertDialogDescription>
-              이 작업은 되돌릴 수 없습니다. 피드와 관련된 모든 댓글이 영구적으로 삭제됩니다.
+              이 피드는 더 이상 다른 사용자에게 표시되지 않으며, 7일 후 자동으로 영구 삭제됩니다.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
