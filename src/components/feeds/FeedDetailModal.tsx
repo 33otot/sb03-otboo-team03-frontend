@@ -11,9 +11,11 @@ interface FeedDetailModalProps {
   feed: FeedDto | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  isDeletedFeed?: boolean;
+  onRestoreClick?: (feedId: string) => void;
 }
 
-export default function FeedDetailModal({ feed, open, onOpenChange }: FeedDetailModalProps) {
+export default function FeedDetailModal({ feed, open, onOpenChange, isDeletedFeed, onRestoreClick }: FeedDetailModalProps) {
   if (!feed) return null;
 
   return (
@@ -27,7 +29,12 @@ export default function FeedDetailModal({ feed, open, onOpenChange }: FeedDetail
           {/* 왼쪽 섹션 - OOTD 캐러셀 (531px) */}
           <FeedDetailLeftSection feed={feed} />
           {/* 오른쪽 섹션 - 피드 정보 & 댓글 (367px) */}
-          <FeedDetailRightSection feed={feed} onDelete={() => onOpenChange(false)} />
+          <FeedDetailRightSection 
+            feed={feed} 
+            onDelete={() => onOpenChange(false)} 
+            isDeletedFeed={isDeletedFeed}
+            onRestoreClick={onRestoreClick}
+          />
         </div>
         <div aria-hidden="true" className="absolute border border-[#e7e7e9] border-solid inset-0 pointer-events-none rounded-[20px]" />
       </DialogContent>

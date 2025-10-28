@@ -5,13 +5,15 @@ import FeedCardSkeleton from '@/components/feeds/FeedCardSkeleton';
 import FeedDetailModal from '@/components/feeds/FeedDetailModal';
 import type { FeedDto } from '@/lib/api/types';
 import { useDeletedFeedStore } from '@/lib/stores/useDeletedFeedStore';
+import { restoreFeed } from '@/lib/api/feeds';
+import { toast } from 'sonner';
 
 interface DeletedFeedListProps {
   userId: string;
 }
 
 export default function DeletedFeedList({ userId }: DeletedFeedListProps) {
-  const { data: feeds, loading, fetch, fetchMore } = useDeletedFeedStore();
+  const { data: feeds, loading, fetch, fetchMore, delete: deleteFeedFromStore } = useDeletedFeedStore();
   const [selectedFeed, setSelectedFeed] = useState<FeedDto | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -23,6 +25,17 @@ export default function DeletedFeedList({ userId }: DeletedFeedListProps) {
   const handleModalClose = () => {
     setModalOpen(false);
     setTimeout(() => setSelectedFeed(null), 300); // 애니메이션 완료 후 상태 정리
+  };
+
+  const handleRestoreClick = async (feedId: string) => {
+    try {
+      await restoreFeed(feedId);
+      deleteFeedFromStore(feedId);
+      toast.success('피드가 성공적으로 복구되었습니다.');
+    } catch (error) {
+      console.error('피드 복구 실패:', error);
+      toast.error('피드 복구에 실패했습니다.');
+    }
   };
 
   // 무한 스크롤 설정
@@ -80,6 +93,8 @@ export default function DeletedFeedList({ userId }: DeletedFeedListProps) {
         feed={selectedFeed}
         open={modalOpen}
         onOpenChange={handleModalClose}
+        isDeletedFeed={true}
+        onRestoreClick={handleRestoreClick}
       />
     </div>
   );

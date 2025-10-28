@@ -16,6 +16,8 @@ import {toast} from "sonner";
 interface FeedDetailRightSectionProps {
   feed: FeedDto;
   onDelete?: () => void;
+  isDeletedFeed?: boolean;
+  onRestoreClick?: (feedId: string) => void;
 }
 
 function WeatherIcon({ skyStatus }: { skyStatus: string }) {
@@ -31,7 +33,10 @@ function WeatherIcon({ skyStatus }: { skyStatus: string }) {
   }
 }
 
-export default function FeedDetailRightSection({ feed, onDelete }: FeedDetailRightSectionProps) {
+export default function FeedDetailRightSection({ feed, onDelete, isDeletedFeed, onRestoreClick }: FeedDetailRightSectionProps) {
+  if (onRestoreClick) { /* dummy usage to prevent TS6133 error */ }
+  // Added a comment to force re-compilation
+
   const { data: currentUser } = useAuthStore();
   const { update, delete: deleteFeedFromStore, loading } = useFeedStore();
   const [isEditing, setIsEditing] = useState(false);
@@ -179,7 +184,7 @@ export default function FeedDetailRightSection({ feed, onDelete }: FeedDetailRig
             </div>
             
             {/* 미트볼 메뉴 - 내 피드인 경우에만 표시 */}
-            {(isOwner || isAdmin) && (
+            {(isOwner || isAdmin || isDeletedFeed) && (
               <div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -188,7 +193,7 @@ export default function FeedDetailRightSection({ feed, onDelete }: FeedDetailRig
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-32">
-                    {isOwner && (
+                    {!isDeletedFeed && isOwner && (
                       <DropdownMenuItem
                         className="cursor-pointer"
                         onClick={(e) => {
@@ -200,7 +205,7 @@ export default function FeedDetailRightSection({ feed, onDelete }: FeedDetailRig
                         수정
                       </DropdownMenuItem>
                     )}
-                    {isOwner && (
+                    {!isDeletedFeed && isOwner && (
                       <DropdownMenuItem
                         className="cursor-pointer text-red-600 focus:text-red-600"
                         onClick={(e) => {
@@ -212,7 +217,19 @@ export default function FeedDetailRightSection({ feed, onDelete }: FeedDetailRig
                         삭제
                       </DropdownMenuItem>
                     )}
-                    {isAdmin && (
+                    {isDeletedFeed && (
+                      <DropdownMenuItem
+                        className="cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onRestoreClick?.(feed.id);
+                        }}
+                      >
+                        <Edit className="size-4 mr-2" /> {/* Using Edit icon for restore for now */}
+                        복구
+                      </DropdownMenuItem>
+                    )}
+                    {!isDeletedFeed && isAdmin && (
                       <DropdownMenuItem
                         className="cursor-pointer text-red-600 focus:text-red-600"
                         onClick={(e) => {
