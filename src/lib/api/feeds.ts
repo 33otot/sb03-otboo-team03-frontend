@@ -38,6 +38,13 @@ export const deleteFeed = async (feedId: string): Promise<void> => {
 };
 
 /**
+ * 피드 물리 삭제
+ */
+export const deleteHardFeed = async (feedId: string): Promise<void> => {
+  await apiClient.delete<void>(`/api/feeds/${feedId}/hard`);
+};
+
+/**
  * 피드 좋아요
  */
 export const likeFeed = async (feedId: string): Promise<FeedDto> => {
