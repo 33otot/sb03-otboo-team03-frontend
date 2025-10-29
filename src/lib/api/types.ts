@@ -318,6 +318,7 @@ export interface UserListParams extends CursorParams, SortParams {
   emailLike?: string;
   roleEqual?: Role;
   locked?: boolean;
+  excludeUserId?: string;
   sortBy: 'email' | 'createdAt';
 }
 

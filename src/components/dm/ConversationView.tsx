@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { useWebSocketStore } from '@/lib/stores/websocketStore';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
 import { useDirectMessageStore } from '@/lib/stores/useDirectMessageStore';
@@ -29,8 +28,11 @@ const formatTimeAgo = (createdAt: string) => {
   return created.toLocaleDateString('ko-KR');
 };
 
-export function ConversationView() {
-  const { userId: targetUserId } = useParams<{ userId: string }>();
+interface ConversationViewProps {
+  userId: string;
+}
+
+export function ConversationView({ userId: targetUserId }: ConversationViewProps) {
   const [targetUser, setTargetUser] = useState<{ id: string; name: string; profileImageUrl?: string } | null>(null);
 
   const { send, isConnected, subscribe } = useWebSocketStore();

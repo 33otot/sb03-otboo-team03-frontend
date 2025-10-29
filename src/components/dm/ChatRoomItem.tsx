@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import type { DirectMessageRoomDto } from '@/lib/api/chats';
 import defaultProfileIcon from '@/assets/icons/profile.svg';
 
@@ -24,15 +23,16 @@ const formatTimestamp = (iso?: string | null) => {
 
 interface ChatRoomItemProps {
   room: DirectMessageRoomDto;
+  onClick?: (userId: string) => void;
 }
 
-export function ChatRoomItem({ room }: ChatRoomItemProps) {
+export function ChatRoomItem({ room, onClick }: ChatRoomItemProps) {
   const { partner, lastMessage, lastMessageSentAt } = room;
 
   return (
-    <Link
-      to={`/dm/${partner.userId}`}
-      className="flex items-center gap-4 p-4 transition-colors rounded-lg hover:bg-gray-100/80"
+    <div
+      className="flex items-center gap-4 p-4 transition-colors rounded-lg hover:bg-gray-100/80 cursor-pointer"
+      onClick={() => onClick?.(partner.userId)}
     >
       <div className="relative flex-shrink-0">
         <img
@@ -56,6 +56,6 @@ export function ChatRoomItem({ room }: ChatRoomItemProps) {
           </p>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
