@@ -47,8 +47,11 @@ export default function ProfilePage() {
             </div>
             
             {/* 탭 네비게이션 */}
-            <div className="flex border-b border-gray-200">
+            <div className="flex border-b border-gray-200" role="tablist">
               <button
+                role="tab"
+                aria-selected={activeTab === 'feed'}
+                aria-controls="feed-panel"
                 className={`py-2 px-4 text-sm font-medium ${
                   activeTab === 'feed'
                     ? 'border-b-2 border-blue-500 text-blue-600'
@@ -59,6 +62,9 @@ export default function ProfilePage() {
                 피드
               </button>
               <button
+                role="tab"
+                aria-selected={activeTab === 'trash'}
+                aria-controls="trash-panel"
                 className={`py-2 px-4 text-sm font-medium ${
                   activeTab === 'trash'
                     ? 'border-b-2 border-blue-500 text-blue-600'
@@ -72,9 +78,12 @@ export default function ProfilePage() {
             
             {/* 사용자 피드 목록 또는 휴지통 목록 - 스크롤 가능 */}
             <div className="bg-white overflow-hidden rounded-lg shadow-sm flex-1 min-h-0">
-              <div className="p-6 h-full">
-                {activeTab === 'feed' && <UserFeedList userId={targetUserId} />}
-                {activeTab === 'trash' && <DeletedFeedList userId={targetUserId} />}
+              <div className="p-6 h-full" role="tabpanel" id={`${activeTab}-panel`}>
+                {activeTab === 'feed' ? (
+                  <UserFeedList userId={targetUserId} />
+                ) : (
+                  <DeletedFeedList userId={targetUserId} />
+                )}
               </div>
             </div>
           </div>

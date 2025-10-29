@@ -31,10 +31,12 @@ export default function DeletedFeedList({ userId }: DeletedFeedListProps) {
     try {
       await restoreFeed(feedId);
       deleteFeedFromStore(feedId);
+      handleModalClose();
       toast.success('피드가 성공적으로 복구되었습니다.');
     } catch (error) {
       console.error('피드 복구 실패:', error);
-      toast.error('피드 복구에 실패했습니다.');
+      const message = error instanceof Error ? error.message : '피드 복구에 실패했습니다.';
+      toast.error(message);
     }
   };
 
@@ -48,7 +50,8 @@ export default function DeletedFeedList({ userId }: DeletedFeedListProps) {
     if (userId) {
       fetch();
     }
-  }, [userId, fetch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
 
   return (
     <div className="h-full overflow-y-auto">
