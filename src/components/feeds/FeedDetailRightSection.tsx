@@ -282,7 +282,7 @@ export default function FeedDetailRightSection({
 
       {/* 댓글 섹션 - 나머지 공간 모두 차지 */}
       <div className="flex-1 w-full min-h-0 mt-4">
-        <FeedComments feed={feed} />
+        <FeedComments feed={feed} isDeletedFeed={isDeletedFeed} />
       </div>
 
       {/* 삭제 확인 다이얼로그 */}
