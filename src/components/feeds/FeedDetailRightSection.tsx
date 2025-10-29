@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MoreVertical, Edit, Trash2 } from 'lucide-react';
+import { MoreVertical, Edit, Trash2, RotateCcw } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
@@ -16,6 +16,8 @@ import {toast} from "sonner";
 interface FeedDetailRightSectionProps {
   feed: FeedDto;
   onDelete?: () => void;
+  isDeletedFeed?: boolean;
+  onRestoreClick?: (feedId: string) => void;
 }
 
 function WeatherIcon({ skyStatus }: { skyStatus: string }) {
@@ -31,7 +33,13 @@ function WeatherIcon({ skyStatus }: { skyStatus: string }) {
   }
 }
 
-export default function FeedDetailRightSection({ feed, onDelete }: FeedDetailRightSectionProps) {
+export default function FeedDetailRightSection({
+  feed,
+  onDelete,
+  isDeletedFeed,
+  onRestoreClick
+}: FeedDetailRightSectionProps) {
+
   const { data: currentUser } = useAuthStore();
   const { update, delete: deleteFeedFromStore, loading } = useFeedStore();
   const [isEditing, setIsEditing] = useState(false);
@@ -78,17 +86,26 @@ export default function FeedDetailRightSection({ feed, onDelete }: FeedDetailRig
     setIsHardDeleteAlertOpen(true);
   };
 
-  const confirmDeleteFeed = async () => {
+  const handleDeleteFeedWithType = async (
+    deleteType: 'soft' | 'hard',
+    setAlertOpen: (open: boolean) => void
+  ) => {
     try {
       setDeleteLoading(true);
-      await deleteFeed(feed.id);
+      
+      if (deleteType === 'hard') {
+        await deleteHardFeed(feed.id);
+        toast.success('피드가 영구 삭제되었습니다.');
+      } else {
+        await deleteFeed(feed.id);
+        toast.success('피드가 삭제되었습니다.');
+      }
+      
       deleteFeedFromStore(feed.id);
-      setIsDeleteAlertOpen(false);
-      toast.success('피드가 삭제되었습니다.');
-      // 피드 상세 페이지에서 목록으로 돌아가는 로직 필요
+      setAlertOpen(false);
     } catch (error) {
-      console.error('피드 삭제 실패:', error);
-      toast.error('피드 삭제에 실패했습니다.');
+      console.error(`피드 ${deleteType === 'hard' ? '영구 ' : ''}삭제 실패:`, error);
+      toast.error(`피드 ${deleteType === 'hard' ? '영구 ' : ''}삭제에 실패했습니다.`);
     } finally {
       setDeleteLoading(false);
       if (onDelete) {
@@ -97,24 +114,8 @@ export default function FeedDetailRightSection({ feed, onDelete }: FeedDetailRig
     }
   };
 
-  const confirmHardDeleteFeed = async () => {
-    try {
-      setDeleteLoading(true);
-      await deleteHardFeed(feed.id);
-      deleteFeedFromStore(feed.id);
-      setIsHardDeleteAlertOpen(false);
-      toast.success('피드가 영구 삭제되었습니다.');
-      // 피드 상세 페이지에서 목록으로 돌아가는 로직 필요
-    } catch (error) {
-      console.error('피드 영구 삭제 실패:', error);
-      toast.error('피드 영구 삭제에 실패했습니다.');
-    } finally {
-      setDeleteLoading(false);
-      if (onDelete) {
-        onDelete();
-      }
-    }
-  };
+  const confirmDeleteFeed = () => handleDeleteFeedWithType('soft', setIsDeleteAlertOpen);
+  const confirmHardDeleteFeed = () => handleDeleteFeedWithType('hard', setIsHardDeleteAlertOpen);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -188,7 +189,7 @@ export default function FeedDetailRightSection({ feed, onDelete }: FeedDetailRig
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-32">
-                    {isOwner && (
+                    {!isDeletedFeed && isOwner && (
                       <DropdownMenuItem
                         className="cursor-pointer"
                         onClick={(e) => {
@@ -200,7 +201,7 @@ export default function FeedDetailRightSection({ feed, onDelete }: FeedDetailRig
                         수정
                       </DropdownMenuItem>
                     )}
-                    {isOwner && (
+                    {!isDeletedFeed && isOwner && (
                       <DropdownMenuItem
                         className="cursor-pointer text-red-600 focus:text-red-600"
                         onClick={(e) => {
@@ -212,7 +213,19 @@ export default function FeedDetailRightSection({ feed, onDelete }: FeedDetailRig
                         삭제
                       </DropdownMenuItem>
                     )}
-                    {isAdmin && (
+                    {isDeletedFeed && isOwner && (
+                      <DropdownMenuItem
+                        className="cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onRestoreClick?.(feed.id);
+                        }}
+                      >
+                        <RotateCcw className="size-4 mr-2" />
+                        복구
+                      </DropdownMenuItem>
+                    )}
+                    {!isDeletedFeed && isAdmin && (
                       <DropdownMenuItem
                         className="cursor-pointer text-red-600 focus:text-red-600"
                         onClick={(e) => {
@@ -269,7 +282,7 @@ export default function FeedDetailRightSection({ feed, onDelete }: FeedDetailRig
 
       {/* 댓글 섹션 - 나머지 공간 모두 차지 */}
       <div className="flex-1 w-full min-h-0 mt-4">
-        <FeedComments feed={feed} />
+        <FeedComments feed={feed} isDeletedFeed={isDeletedFeed} />
       </div>
 
       {/* 삭제 확인 다이얼로그 */}

@@ -9,9 +9,10 @@ import profileIcon from '@/assets/icons/profile.svg';
 
 interface FeedCommentsProps {
   feed: FeedDto;
+  isDeletedFeed?: boolean;
 }
 
-export default function FeedComments({ feed }: FeedCommentsProps) {
+export default function FeedComments({ feed, isDeletedFeed }: FeedCommentsProps) {
   const { data: comments, loading, add, updateParams, fetchMore, hasNext } = useFeedCommentStore();
   const { data: auth } = useAuthStore();
   const [commentText, setCommentText] = useState('');
@@ -155,14 +156,14 @@ export default function FeedComments({ feed }: FeedCommentsProps) {
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="댓글을 입력해주세요"
-              disabled={submitting}
+              placeholder={isDeletedFeed ? "삭제된 피드에는 댓글을 등록할 수 없습니다." : "댓글을 입력해주세요"}
+              disabled={submitting || isDeletedFeed}
               className="flex-1 bg-transparent border-none outline-none font-['SUIT:SemiBold',_sans-serif] text-[16px] text-[#131316] placeholder:text-[#808089] tracking-[-0.4px] focus:ring-0 shadow-none"
             />
-            {commentText.trim() && (
+            {commentText.trim() && !isDeletedFeed && (
               <button
                 onClick={handleSubmitComment}
-                disabled={submitting}
+                disabled={submitting || isDeletedFeed}
                 className="text-blue-500 font-['SUIT:SemiBold',_sans-serif] text-[14px] hover:text-[#1570cc] disabled:opacity-50"
               >
                 {submitting ? '등록 중...' : '등록'}

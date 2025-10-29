@@ -6,7 +6,7 @@ import type {
   FeedCreateRequest,
   FeedUpdateRequest,
   CommentDto,
-  CommentCreateRequest, FeedCommentParams
+  CommentCreateRequest, FeedCommentParams, CursorParams
 } from './types';
 
 /**
@@ -74,3 +74,18 @@ export const createFeedComment = async (
 ): Promise<CommentDto> => {
   return apiClient.post<CommentDto>(`/api/feeds/${feedId}/comments`, request);
 };
+
+/**
+ * 논리 삭제된 피드 목록 조회
+ */
+export const getDeletedFeedList = async (params: CursorParams): Promise<CursorResponse<FeedDto>> => {
+  return apiClient.get<CursorResponse<FeedDto>>('/api/feeds/deleted', { params });
+};
+
+/**
+ * 피드 복구
+ */
+export const restoreFeed = async (feedId: string): Promise<FeedDto> => {
+  return apiClient.patch<FeedDto>(`/api/feeds/${feedId}/restore`);
+};
+
