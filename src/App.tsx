@@ -15,8 +15,6 @@ import ProfilePage from '@/pages/profile/page';
 import UserManagementPage from '@/pages/admin/users/page';
 import ClothesAttributeManagementPage from '@/pages/admin/clothes-attributes/page';
 import DmPage from '@/pages/dm/page';
-import { DmPlaceholder } from '@/components/dm/DmPlaceholder';
-import { ConversationView } from '@/components/dm/ConversationView';
 import MyProfileSettingsPage from '@/pages/settings/page';
 import NotFoundPage from '@/pages/404/page';
 import CsrfInitializer from "@/components/auth/CsrfInitializer.tsx";
@@ -43,10 +41,7 @@ function App() {
           <Route path="recommendations" element={<RecommendationsPage />} />
           <Route path="closet" element={<ClosetPage />} />
           <Route path="feeds" element={<FeedsPage />} />
-          <Route path="dm" element={<DmPage />}>
-            <Route index element={<DmPlaceholder />} />
-            <Route path=":userId" element={<ConversationView />} />
-          </Route>
+          <Route path="dm/:userId?" element={<DmPage />} />
           <Route path="profiles" element={<ProfilePage />} />
           <Route path="admin/users" element={<UserManagementPage />} />
           <Route path="admin/clothes-attributes" element={<ClothesAttributeManagementPage />} />
