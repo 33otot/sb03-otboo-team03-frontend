@@ -6,6 +6,7 @@ import type { UserDto } from '@/lib/api/types';
 import profileIcon from '@/assets/icons/profile.svg';
 import { useInfiniteScroll } from '@/lib/hooks/useInfiniteScroll';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
+import { useDebouncedCallback } from 'use-debounce';
 
 interface UserListPopupProps {
   isOpen: boolean;
@@ -14,22 +15,22 @@ interface UserListPopupProps {
 }
 
 export function UserListPopup({ isOpen, onClose, onSelectUser }: UserListPopupProps) {
-  const { data: users, fetch, fetchMore, updateParams, params, hasNext } = useUserStore();
+  const { data: users, fetch, fetchMore, updateParams, hasNext } = useUserStore();
   const { data: currentUser } = useAuthStore();
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredUsers = users.filter(user => user.id !== currentUser?.userDto?.id);
 
+  const debouncedSetSearchTerm = useDebouncedCallback((value: string) => {
+    setSearchTerm(value);
+  }, 300);
+
   useEffect(() => {
     if (isOpen) {
-      updateParams({ ...params, emailLike: searchTerm || undefined });
+      updateParams({ emailLike: searchTerm || undefined });
       fetch();
     }
-  }, [isOpen, searchTerm, fetch, updateParams]);
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  };
+  }, [isOpen, searchTerm, fetch, updateParams, currentUser?.userDto?.id]);
 
   const { ref: infiniteScrollRef } = useInfiniteScroll({
     onLoadMore: () => {
@@ -51,7 +52,7 @@ export function UserListPopup({ isOpen, onClose, onSelectUser }: UserListPopupPr
           <Input
             placeholder="사용자 검색..."
             value={searchTerm}
-            onChange={handleSearchChange}
+            onChange={(e) => debouncedSetSearchTerm(e.target.value)}
           />
           <div className="max-h-60 overflow-y-auto" ref={infiniteScrollRef}>
             {filteredUsers.length === 0 ? (

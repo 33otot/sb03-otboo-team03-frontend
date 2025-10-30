@@ -41,7 +41,7 @@ function App() {
           <Route path="recommendations" element={<RecommendationsPage />} />
           <Route path="closet" element={<ClosetPage />} />
           <Route path="feeds" element={<FeedsPage />} />
-          <Route path="dm" element={<DmPage />} />
+          <Route path="dm/:userId?" element={<DmPage />} />
           <Route path="profiles" element={<ProfilePage />} />
           <Route path="admin/users" element={<UserManagementPage />} />
           <Route path="admin/clothes-attributes" element={<ClothesAttributeManagementPage />} />
