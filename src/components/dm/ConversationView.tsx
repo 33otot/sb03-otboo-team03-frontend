@@ -6,6 +6,7 @@ import { useInfiniteScroll } from '@/lib/hooks/useInfiniteScroll';
 import { getProfile } from '@/lib/api/users';
 import type { DirectMessageDto } from '@/lib/api/messages';
 import type { ProfileDto } from '@/lib/api/types';
+import type { DirectMessageRoomDto } from '@/lib/api/chats';
 import defaultProfileIcon from '@/assets/icons/profile.svg';
 import sendIcon from '@/assets/icons/ic_send.svg';
 
@@ -30,9 +31,11 @@ const formatTimeAgo = (createdAt: string) => {
 
 interface ConversationViewProps {
   userId: string;
+  onConversationUpdated?: (updatedRoom: DirectMessageRoomDto) => void;
+  onNewConversationCreated?: (newRoom: DirectMessageRoomDto) => void;
 }
 
-export function ConversationView({ userId: targetUserId }: ConversationViewProps) {
+export function ConversationView({ userId: targetUserId, onConversationUpdated, onNewConversationCreated }: ConversationViewProps) {
   const [targetUser, setTargetUser] = useState<{ id: string; name: string; profileImageUrl?: string } | null>(null);
 
   const { send, isConnected, subscribe } = useWebSocketStore();
@@ -96,7 +99,24 @@ export function ConversationView({ userId: targetUserId }: ConversationViewProps
     };
     send('/pub/direct-messages_send', message);
     setContent('');
-  }, [isConnected, auth, targetUser, content, send]);
+
+    const roomInfo: DirectMessageRoomDto = {
+      partner: {
+        userId: targetUser.id,
+        name: targetUser.name,
+        profileImageUrl: targetUser.profileImageUrl || null,
+      },
+      lastMessage: content.trim(),
+      lastMessageSentAt: new Date().toISOString(),
+    };
+
+    // Check if this is a new conversation (no messages yet)
+    if (messages.length === 0) {
+      onNewConversationCreated?.(roomInfo);
+    } else {
+      onConversationUpdated?.(roomInfo);
+    }
+  }, [isConnected, auth, targetUser, content, send, onConversationUpdated, onNewConversationCreated, messages.length]);
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {

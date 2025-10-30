@@ -7,10 +7,13 @@ import { UserListPopup } from '@/components/dm/UserListPopup';
 import type { UserDto } from '@/lib/api/types';
 import { getDirectMessages } from '@/lib/api/messages';
 import { toast } from 'sonner';
+import { useChatStore } from '@/lib/stores/useChatStore';
+import type { DirectMessageRoomDto } from '@/lib/api/chats';
 
 export default function DmPage() {
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [isUserListOpen, setIsUserListOpen] = useState(false);
+  const { updateChatRoom, addChatRoom } = useChatStore();
 
   const handleSelectUser = async (user: UserDto) => {
     setIsUserListOpen(false);
@@ -23,10 +26,19 @@ export default function DmPage() {
         toast.info(`${user.name}님과의 새로운 대화를 시작합니다.`);
       }
       setSelectedUserId(user.id);
+      // fetchChatRooms(); // No longer needed here, ConversationView will update
     } catch (err) {
       console.error('Failed to check existing DM:', err);
       toast.error('대화방 확인 중 오류가 발생했습니다.');
     }
+  };
+
+  const handleConversationUpdated = (updatedRoom: DirectMessageRoomDto) => {
+    updateChatRoom(updatedRoom);
+  };
+
+  const handleNewConversationCreated = (newRoom: DirectMessageRoomDto) => {
+    addChatRoom(newRoom);
   };
 
   return (
@@ -48,7 +60,11 @@ export default function DmPage() {
       {/* 오른쪽 패널: 선택된 대화 내용 */}
       <main className="relative z-0 flex-1 bg-gray-50">
         {selectedUserId ? (
-          <ConversationView userId={selectedUserId} />
+          <ConversationView 
+            userId={selectedUserId} 
+            onConversationUpdated={handleConversationUpdated} 
+            onNewConversationCreated={handleNewConversationCreated} 
+          />
         ) : (
           <DmPlaceholder />
         )}
