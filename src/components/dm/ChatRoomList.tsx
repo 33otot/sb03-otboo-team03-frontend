@@ -19,7 +19,7 @@ export function ChatRoomList({ onSelectUserFromList }: ChatRoomListProps) {
     if (onSelectUserFromList) {
       onSelectUserFromList(userId);
     } else {
-      navigate(`/dm/${userId}`); // Fallback to navigation if not in DmPage context
+      navigate(`/dm`); // Fallback to navigation if not in DmPage context
     }
   };
 

@@ -17,13 +17,20 @@ interface UserListPopupProps {
 export function UserListPopup({ isOpen, onClose, onSelectUser }: UserListPopupProps) {
   const { data: users, fetch, fetchMore, updateParams, hasNext } = useUserStore();
   const { data: currentUser } = useAuthStore();
+  const [inputValue, setInputValue] = useState(''); // Local state for input value
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredUsers = users.filter(user => user.id !== currentUser?.userDto?.id);
 
-  const debouncedSetSearchTerm = useDebouncedCallback((value: string) => {
+  const debouncedSearch = useDebouncedCallback((value: string) => {
     setSearchTerm(value);
   }, 300);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputValue(value);
+    debouncedSearch(value);
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -51,8 +58,8 @@ export function UserListPopup({ isOpen, onClose, onSelectUser }: UserListPopupPr
         <div className="grid gap-4 py-4">
           <Input
             placeholder="사용자 검색..."
-            value={searchTerm}
-            onChange={(e) => debouncedSetSearchTerm(e.target.value)}
+            value={inputValue}
+            onChange={handleInputChange}
           />
           <div className="max-h-60 overflow-y-auto" ref={infiniteScrollRef}>
             {filteredUsers.length === 0 ? (
