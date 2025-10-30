@@ -34,7 +34,9 @@ export const useChatStore = create<ChatStoreState>((set) => ({
   },
   addChatRoom: (newRoom: DirectMessageRoomDto) => {
     set((state) => ({
-      chatRooms: [newRoom, ...state.chatRooms], // Add new room to the top
+      chatRooms: state.chatRooms.some(room => room.partner.userId === newRoom.partner.userId)
+        ? state.chatRooms
+        : [newRoom, ...state.chatRooms],
     }));
   },
 }));
