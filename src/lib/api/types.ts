@@ -316,7 +316,6 @@ export interface SortParams {
 
 export interface UserListParams extends CursorParams, SortParams {
   emailLike?: string;
-  nameLike?: string;
   roleEqual?: Role;
   locked?: boolean;
   sortBy: 'email' | 'createdAt';
