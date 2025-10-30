@@ -57,7 +57,7 @@ export function UserListPopup({ isOpen, onClose, onSelectUser }: UserListPopupPr
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <Input
-            placeholder="사용자 검색..."
+            placeholder="사용자 이메일 검색..."
             value={inputValue}
             onChange={handleInputChange}
           />
