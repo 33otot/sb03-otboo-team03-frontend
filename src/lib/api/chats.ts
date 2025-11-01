@@ -18,12 +18,24 @@ export interface DirectMessageRoomDto {
 // 백엔드 DirectMessageRoomListResponse에 맞춰 정의
 export interface DirectMessageRoomListResponse {
   rooms: DirectMessageRoomDto[];
+  nextCursor: string | null;
+  nextIdAfter: string | null;
+  hasNext: boolean;
+  totalCount: number;
+  sortBy: string;
+  sortDirection: string;
+}
+
+export interface GetChatRoomsParams {
+  cursor?: string;
+  idAfter?: string;
+  limit: number;
 }
 
 /**
  * 현재 사용자의 모든 대화방 목록을 가져옵니다.
  * @returns DirectMessageRoomListResponse의 Promise
  */
-export const getChatRooms = async (): Promise<DirectMessageRoomListResponse> => {
-  return apiClient.get<DirectMessageRoomListResponse>('/api/direct-messages/rooms');
+export const getChatRooms = async (params: GetChatRoomsParams): Promise<DirectMessageRoomListResponse> => {
+  return apiClient.get<DirectMessageRoomListResponse>('/api/direct-messages/rooms', { params });
 };
