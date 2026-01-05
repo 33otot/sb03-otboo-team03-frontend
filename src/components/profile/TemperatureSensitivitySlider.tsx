@@ -29,7 +29,7 @@ export default function TemperatureSensitivitySlider({
             max={5}
             min={1}
             step={1}
-            className="w-full [&_[data-slot=slider-track]]:bg-[var(--color-gray-200)] [&_[data-slot=slider-range]]:bg-[var(--color-blue-500)] [&_[data-slot=slider-thumb]]:bg-[var(--color-blue-500)] [&_[data-slot=slider-thumb]]:border-[var(--color-blue-500)]"
+            className="w-full [&_[data-slot=slider-track]]:bg-[var(--color-gray-200)] [&_[data-slot=slider-range]]:bg-[var(--color-green-600)] [&_[data-slot=slider-thumb]]:bg-[var(--color-green-600)] [&_[data-slot=slider-thumb]]:border-[var(--color-green-600)]"
           />
         </div>
         

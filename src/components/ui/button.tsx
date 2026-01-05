@@ -11,11 +11,11 @@ const buttonVariants = cva(
       variant: {
         // 🔥 프로젝트 커스텀 variants (기존 코드 호환성)
         primary:
-          "bg-[var(--color-blue-500)] text-white hover:bg-[var(--color-blue-500)]/90 disabled:bg-[var(--color-gray-200)] disabled:text-[var(--color-gray-400)] rounded-[12px]",
+          "bg-green-600 text-white hover:bg-green-700 disabled:bg-[var(--color-gray-200)] disabled:text-[var(--color-gray-400)] rounded-[12px]",
         secondary:
           "bg-white border border-[var(--color-gray-300)] text-[var(--color-gray-600)] hover:bg-[var(--color-gray-50)] disabled:bg-[var(--color-gray-100)] disabled:text-[var(--color-gray-400)] rounded-[12px]",
         ghost:
-          "bg-transparent text-[var(--color-blue-500)] hover:bg-[var(--color-blue-100)] disabled:text-[var(--color-gray-400)] rounded-[12px]",
+          "bg-transparent text-[var(--color-green-500)] hover:bg-[var(--color-green-100)] disabled:text-[var(--color-gray-400)] rounded-[12px]",
         
         // 🎯 shadcn/ui 표준 variants (AlertDialog 등 호환성)
         default:

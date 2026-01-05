@@ -268,7 +268,7 @@ export default function RegisterForm() {
         </span>
         <Link 
           to="/auth/login"
-          className="text-blue-500 hover:underline"
+          className="text-green-700 hover:underline"
         >
           로그인
         </Link>

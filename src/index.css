@@ -49,7 +49,8 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  /*--primary: oklch(0.205 0 0);*/
+  --primary: oklch(0.55 0.15 145);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -105,6 +106,10 @@
   --color-gray-200: #E7E7E9;
   --color-gray-100: #F7F7F8;
   --color-gray-50: #FAFAFA;
+  --color-green-400: #26b23d;
+  --color-green-500: #1dad24;
+  --color-green-600: #16a332;
+  --color-green-700: #1b9327;
   --color-blue-600: #00086A;
   --color-blue-500: #000080;
   --color-blue-400: #1B3FB8;
@@ -141,7 +146,8 @@
   --chart-5: oklch(0.645 0.246 16.439);
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
+  /*--sidebar-primary: oklch(0.488 0.243 264.376);*/
+  --sidebar-primary: oklch(0.55 0.15 145);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.269 0 0);
   --sidebar-accent-foreground: oklch(0.985 0 0);

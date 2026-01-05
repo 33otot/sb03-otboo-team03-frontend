@@ -27,7 +27,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
         success: <CheckCircle2 className="size-5 text-green-400" />,
         error: <XCircle className="size-5 text-red-400" />,
         warning: <AlertCircle className="size-5 text-yellow-400" />,
-        info: <AlertCircle className="size-5 text-blue-400" />,
+        info: <AlertCircle className="size-5 text-green-500" />,
       }}
       {...props}
     />

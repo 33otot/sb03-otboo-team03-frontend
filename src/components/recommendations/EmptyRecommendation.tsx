@@ -19,7 +19,7 @@ export default function EmptyRecommendation() {
       {/* 옷 등록 버튼 */}
       <button
           onClick={() => navigate('/closet')}
-          className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-3 px-6 rounded-xl transition-colors mt-4"
+          className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-xl transition-colors mt-4"
       >
         옷 등록하러 가기
       </button>

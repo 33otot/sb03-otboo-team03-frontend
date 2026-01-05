@@ -155,7 +155,7 @@ export function ConversationView({ userId: targetUserId, onConversationUpdated, 
                 {msg.sender.userId === auth?.userDto.id ? (
                   <div className="flex gap-2 items-end justify-end">
                     <p className="text-xs text-gray-500">{formatTimeAgo(msg.createdAt)}</p>
-                    <div className="bg-blue-500 text-white p-3 rounded-lg max-w-xs break-words">
+                    <div className="bg-green-500 text-white p-3 rounded-lg max-w-xs break-words">
                       {msg.content}
                     </div>
                   </div>

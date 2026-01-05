@@ -77,7 +77,7 @@ export default function ProfileImageUpload({
             onClick={handleButtonClick}
             variant="primary"
             size="sm"
-            className="bg-[var(--color-blue-500)] text-white hover:bg-[var(--color-blue-500)]/90 rounded-full px-4 py-2 text-[var(--font-size-body-2)] font-[var(--font-weight-bold)] tracking-[-0.4px] shadow-sm !text-white"
+            className="bg-green-600 text-white hover:bg-green-700 rounded-full px-4 py-2 text-[var(--font-size-body-2)] font-[var(--font-weight-bold)] tracking-[-0.4px] shadow-sm !text-white"
           >
             변경
           </Button>

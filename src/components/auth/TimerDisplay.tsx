@@ -45,7 +45,7 @@ export default function TimerDisplay({ initialSeconds, onExpire, isActive }: Tim
         </svg>
       </div>
       
-      <div className="text-blue-500 text-xl font-extrabold tracking-[-0.5px] text-center">
+      <div className="text-green-700 text-xl font-extrabold tracking-[-0.5px] text-center">
         {formatTime(seconds)}
       </div>
     </div>

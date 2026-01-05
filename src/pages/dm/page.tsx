@@ -48,7 +48,7 @@ export default function DmPage() {
         <div className="sticky top-0 z-10 bg-white p-4 border-b flex items-center justify-between">
           <h1 className="text-2xl font-bold text-gray-800">메시지</h1>
           <button
-            className="bg-blue-500 text-white rounded-full p-2 shadow-lg hover:bg-blue-600 transition-colors"
+            className="bg-green-500 text-white rounded-full p-2 shadow-lg hover:bg-green-600 transition-colors"
             onClick={() => setIsUserListOpen(true)}
           >
             <Plus size={20} />

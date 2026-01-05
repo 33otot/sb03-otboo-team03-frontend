@@ -110,13 +110,13 @@ export default function LoginForm() {
     
           {/* 타이틀 */}
           <div className="text-center -translate-y-3 md:-translate-y-5 space-y-2">
-  <h1 className="font-headline text-[44px] md:text-[56px] leading-none tracking-[-0.02em] text-[#2a167b] inline-block relative">
+  <h1 className="font-headline text-[44px] md:text-[56px] leading-none tracking-[-0.02em] text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-lime-500 inline-block relative">
     옷장을 부탁해
-    <span className="absolute left-0 right-0 -bottom-1 h-1.5 rounded-full bg-[#e9e4ff]" />
+    <span className="absolute left-0 right-0 -bottom-1 h-1.5 rounded-full bg-[#82d57c]" />
   </h1>
 
   <p className="mt-2 text-[14px] md:text-[15px] font-semibold text-gray-700">
-  오늘 날씨에 맞춰 <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-sky-400">옷</span>을 골라드려요
+  오늘 날씨에 맞춰 <span className="text-transparent bg-clip-text bg-gradient-to-r from-lime-700 to-lime-700">옷</span>을 골라드려요
 </p>
 </div>
       

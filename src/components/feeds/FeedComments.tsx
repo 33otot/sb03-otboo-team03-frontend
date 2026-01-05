@@ -164,7 +164,7 @@ export default function FeedComments({ feed, isDeletedFeed }: FeedCommentsProps)
               <button
                 onClick={handleSubmitComment}
                 disabled={submitting || isDeletedFeed}
-                className="text-blue-500 font-['SUIT:SemiBold',_sans-serif] text-[14px] hover:text-[#1570cc] disabled:opacity-50"
+                className="text-green-700 font-['SUIT:SemiBold',_sans-serif] text-[14px] hover:text-[#1b9327] disabled:opacity-50"
               >
                 {submitting ? '등록 중...' : '등록'}
               </button>
