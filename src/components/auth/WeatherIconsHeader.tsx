@@ -1,4 +1,4 @@
-import LoginUpperSectionSvg from "@/assets/illust_logos/login upper section.svg";
+import LoginUpperSectionSvg from "@/assets/illust_logos/login_upper_section.png";
 
 export default function WeatherIconsHeader() {
   return (
