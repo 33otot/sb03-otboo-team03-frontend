@@ -8,7 +8,7 @@ import setting2Icon from '@/assets/illust_logos/il_setting-2.svg';
 import closetIcon from '@/assets/illust_logos/il_closet.svg';
 import dmIcon from '@/assets/icons/ic_dm.svg';
 import profileIcon from '@/assets/icons/profile.svg';
-import LogoSvg from "@/assets/illust_logos/Logo.svg";
+import LogoSvg from "@/assets/illust_logos/Logo.png";
 import {useAuthStore} from "@/lib/stores/useAuthStore.ts";
 
 interface SideMenuBtnProps {

@@ -206,7 +206,7 @@ export default function EditClothesAttributeModal({ isOpen, attribute, onClose }
             <Button
               onClick={handleSubmit}
               disabled={loading}
-              className="h-[46px] px-[18px] py-2.5 bg-blue-500 hover:bg-blue-400/90 text-white font-['SUIT:Bold',_sans-serif] text-[18px] tracking-[-0.45px] rounded-[12px]"
+              className="h-[46px] px-[18px] py-2.5 bg-green-500 hover:bg-green-600/90 text-white font-['SUIT:Bold',_sans-serif] text-[18px] tracking-[-0.45px] rounded-[12px]"
             >
               {loading ? "처리 중..." : "완료"}
             </Button>

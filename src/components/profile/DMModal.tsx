@@ -206,7 +206,7 @@ export default function DMModal({ open, onOpenChange, targetUser }: DMModalProps
                                 <p className="leading-[normal] whitespace-pre">{formatTimeAgo(msg.createdAt)}</p>
                               </div>
                             </div>
-                            <div className="bg-blue-500 px-[19px] py-3.5 rounded-[16px]">
+                            <div className="bg-green-500 px-[19px] py-3.5 rounded-[16px]">
                               <div className="font-['SUIT:SemiBold',_sans-serif] text-white text-[18px] tracking-[-0.45px] leading-[0] not-italic">
                                 <p className="leading-[normal] whitespace-pre">{msg.content}</p>
                               </div>

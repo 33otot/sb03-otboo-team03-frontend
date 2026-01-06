@@ -5,7 +5,7 @@ export default function AuthFooterLinks() {
     <div className="flex flex-col gap-[18px] items-center justify-center w-full">
       <Link 
         to="/auth/forgot-password"
-        className="text-blue-500 text-base font-semibold tracking-[-0.4px] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+        className="text-green-700 text-base font-semibold tracking-[-0.4px] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
       >
         비밀번호를 잊으셨나요?
       </Link>
@@ -18,7 +18,7 @@ export default function AuthFooterLinks() {
         </span>
         <Link 
           to="/auth/register"
-          className="text-blue-500 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+          className="text-green-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
         >
           회원가입
         </Link>

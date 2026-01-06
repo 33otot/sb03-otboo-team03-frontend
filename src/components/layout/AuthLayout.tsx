@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import LoginBgImage from '@/assets/illust_logos/Login BG.svg';
+import LoginBgImage from '@/assets/illust_logos/Login_BG.png';
 
 export default function AuthLayout() {
   return (

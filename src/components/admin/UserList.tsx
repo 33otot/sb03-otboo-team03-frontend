@@ -57,8 +57,8 @@ export default function UserList() {
     }
     
     return params.sortDirection === 'DESCENDING' 
-      ? <ChevronDown className="w-4 h-4 text-blue-500" />
-      : <ChevronUp className="w-4 h-4 text-blue-500" />;
+      ? <ChevronDown className="w-4 h-4 text-green-700" />
+      : <ChevronUp className="w-4 h-4 text-green-700" />;
   };
 
   const handleLockToggle = async (user: UserDto) => {
@@ -130,7 +130,7 @@ export default function UserList() {
               <TableRow className="bg-[#f7f7f8] h-11 hover:bg-[#f7f7f8] border-none">
                 <TableHead 
                   className={`group px-5 py-3 text-[16px] font-['SUIT:Bold',_sans-serif] tracking-[-0.4px] w-[300px] cursor-pointer select-none ${
-                    params.sortBy === 'email' ? 'text-blue-500' : 'text-[#34343d] hover:text-blue-500'
+                    params.sortBy === 'email' ? 'text-green-700' : 'text-[#34343d] hover:text-green-700'
                   }`}
                   onClick={() => handleSort('email')}
                 >
@@ -141,7 +141,7 @@ export default function UserList() {
                 </TableHead>
                 <TableHead 
                   className={`group px-5 py-3 text-[16px] font-['SUIT:Bold',_sans-serif] tracking-[-0.4px] w-[320px] cursor-pointer select-none ${
-                    params.sortBy === 'createdAt' ? 'text-blue-500' : 'text-[#34343d] hover:text-blue-500'
+                    params.sortBy === 'createdAt' ? 'text-green-700' : 'text-[#34343d] hover:text-green-700'
                   }`}
                   onClick={() => handleSort('createdAt')}
                 >
@@ -214,7 +214,7 @@ export default function UserList() {
                             (toggleLoading?.userId === user.id && toggleLoading?.type === 'role') ||
                             authData?.userDto?.id === user.id
                           }
-                          className="w-[50px] h-[25px] data-[state=checked]:bg-blue-500 data-[state=unchecked]:bg-[#d4d4d9]"
+                          className="w-[50px] h-[25px] data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-[#d4d4d9]"
                           style={{
                             '--thumb-size': '18px',
                             '--thumb-translate-checked': '28px',

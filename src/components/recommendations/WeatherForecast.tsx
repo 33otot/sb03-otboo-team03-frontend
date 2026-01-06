@@ -114,7 +114,7 @@ export default function WeatherForecast() {
                     className="content-stretch flex flex-col gap-1.5 items-center justify-center relative shrink-0 w-[120px] cursor-pointer hover:border-1 rounded-2xl"
                     onClick={() => selectWeather(weather)}
                 >
-                  <div className={`font-${isSelected ? 'extrabold' : 'bold'} leading-none min-w-full not-italic relative shrink-0 text-base text-center tracking-[-0.4px] ${isSelected ? 'text-blue-500' : 'text-gray-800'}`} style={{ width: "min-content" }}>
+                  <div className={`font-${isSelected ? 'extrabold' : 'bold'} leading-none min-w-full not-italic relative shrink-0 text-base text-center tracking-[-0.4px] ${isSelected ? 'text-green-700' : 'text-gray-800'}`} style={{ width: "min-content" }}>
                     <p className="leading-normal">{date}</p>
                   </div>
 

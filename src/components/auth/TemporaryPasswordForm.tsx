@@ -122,7 +122,7 @@ export default function TemporaryPasswordForm({ email, onNext, onTimeout }: Temp
       <div className="flex justify-center">
         <Link 
           to="/auth/login"
-          className="text-blue-500 text-base font-semibold tracking-[-0.4px] hover:underline"
+          className="text-green-700 text-base font-semibold tracking-[-0.4px] hover:underline"
         >
           로그인 화면으로 돌아가기
         </Link>

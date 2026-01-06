@@ -58,7 +58,7 @@ export default function RecommendationHeader({ reason }: Props) {
 
         {/* OOTD 등록 버튼 */}
         <button
-          className="bg-blue-500 box-border content-stretch flex gap-1.5 h-[46px] items-center justify-center px-[18px] py-2.5 relative rounded-[12px] shrink-0 hover:bg-blue-400/90 transition-colors"
+          className="bg-green-500 box-border content-stretch flex gap-1.5 h-[46px] items-center justify-center px-[18px] py-2.5 relative rounded-[12px] shrink-0 hover:bg-green-400/90 transition-colors"
           onClick={handleRegister}
         >
           <div className="font-bold leading-none not-italic relative shrink-0 text-white text-[18px] text-nowrap tracking-[-0.45px]">
